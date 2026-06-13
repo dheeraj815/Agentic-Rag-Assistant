@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  agentic-rag-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: agentic-rag-assistant:latest
+    container_name: agentic-rag-assistant
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./chroma_db:/app/chroma_db
+      - ./database:/app/database
+      - ./reports:/app/reports
+      - ./logs:/app/logs
+    restart: unless-stopped

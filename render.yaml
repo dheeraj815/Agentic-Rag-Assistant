@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: agentic-rag-assistant
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "streamlit run app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true --server.enableCORS=false --server.enableXsrfProtection=false"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_TEMPERATURE
+        value: "0.1"
+      - key: EMBEDDING_MODEL
+        value: all-MiniLM-L6-v2
+      - key: CHROMA_PERSIST_DIR
+        value: ./chroma_db
+      - key: CHROMA_COLLECTION_NAME
+        value: rag_documents
+      - key: SQLITE_DB_PATH
+        value: ./database/app.db
+      - key: TOP_K_RESULTS
+        value: "5"
+      - key: CHUNK_SIZE
+        value: "1000"
+      - key: CHUNK_OVERLAP
+        value: "200"
+      - key: HALLUCINATION_THRESHOLD
+        value: "0.6"
+      - key: CONFIDENCE_THRESHOLD
+        value: "0.5"
+      - key: REPORTS_DIR
+        value: ./reports
+      - key: LOG_LEVEL
+        value: INFO
+      - key: LOG_FILE
+        value: ./logs/app.log
+    disk:
+      name: agentic-rag-data
+      mountPath: /opt/render/project/src/chroma_db
+      sizeGB: 1
